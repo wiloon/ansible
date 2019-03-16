@@ -3,3 +3,7 @@
   tasks:
   - name: Install htop
     apt: name=htop
+
+  - name: install emacs
+    apt:
+            name: emacs

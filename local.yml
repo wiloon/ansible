@@ -11,10 +11,10 @@
       name: "{{ item }}"
       with_items: "{{ app_list }}"
 
-  - name: "config /etc/profile"
+  - name: config /etc/profile
     lineinfile:
-    path: /etc/profile
-    line: "{{ item }}"
-    with_items:
-      - "alias ll = 'ls -l --color=auto'"
-      - "alias la = 'ls -la --color=auto'"
+      path: /etc/profile
+      line: "{{ item }}"
+      with_items:
+        - "alias ll = 'ls -l --color=auto'"
+        - "alias la = 'ls -la --color=auto'"

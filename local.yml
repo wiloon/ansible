@@ -16,5 +16,5 @@
         path: /etc/profile
         line: "{{ item }}"
         with_items:
-          - "alias ll = 'ls -l'"
-          - "alias la = 'ls -la'"
+          - "alias ll = 'ls -l --color=auto'"
+          - "alias la = 'ls -la --color=auto'"

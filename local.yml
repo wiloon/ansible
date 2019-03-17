@@ -8,6 +8,5 @@
   tasks:
   - name: Install htop
     apt:
-    name: {{item}}
-    with_items: {{app_list}}
-    
+    name: "{{ item }}"
+    with_items: "{{ app_list }}"

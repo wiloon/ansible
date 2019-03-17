@@ -1,9 +1,13 @@
 - hosts: localhost
   become: true
+  vars:
+    app_list:
+      - - htop
+        - emacs
+        - vim
   tasks:
   - name: Install htop
-    apt: name=htop
-
-  - name: install emacs
     apt:
-            name: emacs
+    name: {{item}}
+    with_items: {{app_list}}
+    

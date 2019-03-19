@@ -6,15 +6,16 @@
         - emacs
         - vim
   tasks:
-  - name: Install apps
-    apt:
-      name: "{{ item }}"
+    - name: "Install apps"
+      apt:
+        name: "{{ item }}"
+        state: present 
       with_items: "{{ app_list }}"
 
-  - name: config /etc/profile
-    lineinfile:
-      path: /etc/profile
-      line: "{{ item }}"
+    - name: config /etc/profile
+      lineinfile:
+        path: /etc/profile
+        line: "{{ item }}"
       with_items:
         - "alias ll = 'ls -l --color=auto'"
-        - "alias la = 'ls -la --color=auto'"
+        - "alias la = 'ls -la --color=auto'"      

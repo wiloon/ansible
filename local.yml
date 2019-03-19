@@ -1,24 +1,26 @@
 - hosts: localhost
   become: true
   vars:
-    app_list:
+    apps_common:
       - htop
       - emacs
       - vim
+    apps_debian:
+      - openjdk-11-jdk
+    apps_archlinux:
+      - jdk-openjdk
 
   tasks:
-    - name: debug
-      debug:
-        msg: "dist {{ ansible_distribution }}"
-
-    - name: "Install apps"
+    - name: "Install apps for debian"
       apt:
-        name: '{{ app_list }}'
+        name: '{{ apps_common }} + {{ apps_debian }}'
+        state: latest
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-    - name: "Install apps"
+    - name: "Install apps for archlinux"
       pacman:
-        name: '{{ app_list }}'
+        name: '{{ apps_common }} + {{ apps_archlinux }}'
+        state: latest
       when: ansible_distribution == 'Archlinux'
 
     - name: config /etc/profile

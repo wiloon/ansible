@@ -11,13 +11,13 @@
       - jdk-openjdk
 
   tasks:
-    - name: "Install apps for debian"
+    - name: "install apps for debian"
       apt:
         name: '{{ apps_common }} + {{ apps_debian }}'
         state: latest
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-    - name: "Install apps for archlinux"
+    - name: "install apps for archlinux"
       pacman:
         name: '{{ apps_common }} + {{ apps_archlinux }}'
         state: latest

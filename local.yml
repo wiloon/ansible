@@ -1,3 +1,4 @@
+---
 - hosts: localhost
   become: true
   vars:
@@ -5,6 +6,9 @@
       - htop
       - emacs
       - vim
+      - axel
+      - maven
+      - gradle
     apps_debian:
       - openjdk-11-jdk
     apps_archlinux:
@@ -30,3 +34,4 @@
       with_items:
         - "alias ll = 'ls -l --color=auto'"
         - "alias la = 'ls -la --color=auto'"      
+

@@ -20,7 +20,7 @@
       - jdk-openjdk
 
   tasks:
-    - name: "install apps for debian"
+    - name: "debian install emacs and update cache"
       apt:
         name: 'emacs'
         state: latest

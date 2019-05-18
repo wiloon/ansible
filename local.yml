@@ -22,9 +22,15 @@
   tasks:
     - name: "install apps for debian"
       apt:
-        name: '{{ apps_common }} + {{ apps_debian }}'
+        name: 'emacs'
         state: latest
         update_cache: yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      
+    - name: "install apps for debian"
+      apt:
+        name: '{{ apps_common }} + {{ apps_debian }}'
+        state: latest
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
     - name: "prepare for install jdk"

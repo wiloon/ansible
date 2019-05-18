@@ -17,9 +17,8 @@
       - jdk-openjdk
 
   tasks:
-
       # add-apt-repository depends on software-prpoerties-common
-      - name: "debian install emacs and update cache"
+      - name: "debian install software-properties-common and update cache"
       apt:
         name: 'software-properties-common'
         state: latest
@@ -29,7 +28,6 @@
     - name: "prepare for install jdk"
       shell: add-apt-repository ppa:webupd8team/java -y
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-      
 
     - name: "install apps for debian"
       apt:

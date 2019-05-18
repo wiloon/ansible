@@ -11,39 +11,32 @@
       - gradle
       
     apps_debian:
-      - software-properties-common
-
-    apps_debian_other:
       - openjdk-11-jdk
       
     apps_archlinux:
       - jdk-openjdk
 
   tasks:
-    - name: "debian install emacs and update cache"
+
+      # add-apt-repository depends on software-prpoerties-common
+      - name: "debian install emacs and update cache"
       apt:
-        name: 'emacs'
+        name: 'software-properties-common'
         state: latest
         update_cache: yes
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: "prepare for install jdk"
+      shell: add-apt-repository ppa:webupd8team/java -y
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       
+
     - name: "install apps for debian"
       apt:
         name: '{{ apps_common }} + {{ apps_debian }}'
         state: latest
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-    - name: "prepare for install jdk"
-      shell: add-apt-repository ppa:webupd8team/java -y
-      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-    - name: "install apps for debian"
-      apt:
-        name: '{{ apps_debian_other }}'
-        state: latest
-        update_cache: yes
-      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-      
     - name: "install apps for archlinux"
       pacman:
         name: '{{ apps_common }} + {{ apps_archlinux }}'

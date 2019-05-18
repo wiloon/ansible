@@ -17,8 +17,8 @@
       - jdk-openjdk
 
   tasks:
-      # add-apt-repository depends on software-prpoerties-common
-      - name: "debian install software-properties-common and update cache"
+     # add-apt-repository depends on software-prpoerties-common
+     - name: "debian install software-properties-common and update cache"
       apt:
         name: 'software-properties-common'
         state: latest

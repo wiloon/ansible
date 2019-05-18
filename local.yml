@@ -11,22 +11,25 @@
       - gradle
       
     apps_debian:
-      - openjdk-11-jdk
+      - emacs
       
     apps_archlinux:
       - jdk-openjdk
 
   tasks:
-     # add-apt-repository depends on software-prpoerties-common
-     - name: "debian install software-properties-common and update cache"
+    - name: "download openjdk"
+      unarchive:
+        src: https://download.java.net/java/GA/jdk12/33/GPL/openjdk-12_linux-x64_bin.tar.gz
+        dest: /usr/local/bin
+        remote_src: yes
+      tags:
+        - jdk
+
+    - name: "debian install emacs and update cache"
       apt:
-        name: 'software-properties-common'
+        name: 'emacs'
         state: latest
         update_cache: yes
-      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-    - name: "prepare for install jdk"
-      shell: add-apt-repository ppa:webupd8team/java -y
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
     - name: "install apps for debian"
@@ -46,6 +49,8 @@
         path: /etc/profile
         line: "{{ item }}"
       with_items:
-        - "alias ll = 'ls -l --color=auto'"
-        - "alias la = 'ls -la --color=auto'"      
+        - "alias ll='ls -l --color=auto'"
+        - "alias la='ls -la --color=auto'"
+        - "export JAVA_HOME=/usr/local/bin/jdk-12"
+        - "export PATH=$JAVA_HOME/bin:$PATH"
 

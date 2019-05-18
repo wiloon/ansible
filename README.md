@@ -26,5 +26,5 @@ sudo pacman -S ansible
 sudo apt-get install ansible
 
 # init debian via ansible
-sudo ansible-pull -U https://github.com/wiloon/ansible.git
+sudo ansible-pull -U https://github.com/wiloon/ansible.git --skip-tags=jdk
 ```

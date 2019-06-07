@@ -54,3 +54,16 @@
         - "export JAVA_HOME=/usr/local/bin/jdk-12"
         - "export PATH=$JAVA_HOME/bin:$PATH"
 
+- name: config .ssh/config
+  blockinfile:
+    path: ~/.ssh/config
+    block: |
+      host aliyun
+        hostname wiloon.com
+        user wiloon
+        port 1022
+
+      host nuc
+        hostname nuc
+        user root
+        port 22

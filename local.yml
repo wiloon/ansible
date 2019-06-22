@@ -12,18 +12,32 @@
       
     apps_debian:
       - emacs
+      - ldnsutils
       
     apps_archlinux:
       - jdk-openjdk
 
   tasks:
+    - name: create user
+      user:
+        name: wiloon
+        password: '$6$bNo6nGRA$DM/VghgjxTongwZm4BUL7jkw4lfF1nETHxk/YqVmbIGDO3HEzXXrTWeCw1WF7ZLkfgmt2w/Ta02xn2jbQdJNi/'
+        shell: /bin/bash
+
+    - name: chown /home/wiloon
+      file:
+        path: "/home/wiloon"
+        owner: wiloon
+        group: wiloon
+        mode: '0755'
+
     - name: Check Java
       shell: command -v java
       register: check_java
       ignore_errors: True
       changed_when: False
       
-    - debug: msg="{{check_java}}"
+    - debug: msg="{{check_java.stdout}}"
       when: check_java.rc == 0
 
     - name: "download openjdk"
@@ -33,6 +47,7 @@
         remote_src: yes
       tags:
         - jdk
+      when: check_java.stdout ==''
 
     - name: "debian install emacs and update cache"
       apt:
@@ -40,6 +55,8 @@
         state: latest
         update_cache: yes
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      tags:
+        - slow_task
 
     - name: "install apps for debian"
       apt:
@@ -63,9 +80,17 @@
         - "export JAVA_HOME=/usr/local/bin/jdk-12"
         - "export PATH=$JAVA_HOME/bin:$PATH"
 
+    - name: mk /home/wiloon/.ssh
+      file:
+        path: /home/wiloon/.ssh
+        state: directory
+
     - name: config .ssh/config
       blockinfile:
-        path: ~/.ssh/config
+        path: /home/wiloon/.ssh/config
+        create: yes
+        owner: wiloon
+        group: wiloon
         block: |
           host aliyun
             hostname wiloon.com
@@ -76,3 +101,9 @@
             hostname nuc
             user root
             port 22
+    - name: mk /home/wiloon/.ssh/id_rsa
+      file:
+        path: /home/wiloon/.ssh/id_rsa
+        state: touch
+        owner: wiloon
+        group: wiloon

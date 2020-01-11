@@ -18,6 +18,10 @@
       - jdk-openjdk
 
   tasks:
+    - name: Display all variables/facts known for a host
+      debug:
+        msg: "archlinux init"
+
     - name: create user
       user:
         name: wiloon

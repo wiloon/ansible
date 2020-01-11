@@ -5,7 +5,7 @@
     apps_common:
       - htop
       - emacs
-      - vim
+      - gvim
       - axel
       - maven
       - gradle

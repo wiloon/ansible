@@ -35,9 +35,9 @@
         group: wiloon
         mode: '0755'
 
-    - name: config /etc/sudoer
+    - name: config /etc/sudoers
       lineinfile:
-        path: /etc/sudoer
+        path: /etc/sudoers
         line: "{{ item }}"
       with_items:
         - "alias ll='ls -l --color=auto'"

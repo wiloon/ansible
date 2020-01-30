@@ -35,6 +35,13 @@
         group: wiloon
         mode: '0755'
 
+    - name: config /etc/sudoer
+      lineinfile:
+        path: /etc/sudoer
+        line: "{{ item }}"
+      with_items:
+        - "alias ll='ls -l --color=auto'"
+        
     - name: Check Java
       shell: command -v java
       register: check_java
@@ -104,6 +111,11 @@
           host nuc
             hostname nuc
             user root
+            port 22
+
+          host cstick
+            hostname 192.168.50.215
+            user wiloon
             port 22
     - name: mk /home/wiloon/.ssh/id_rsa
       file:

@@ -5,16 +5,70 @@
     apps_common:
       - htop
       - emacs
-      - vim
-      - axel
+      - gvim
+      - aria2
       - maven
       - gradle
+      
     apps_debian:
-      - openjdk-11-jdk
+      - emacs
+      - ldnsutils
+      
     apps_archlinux:
       - jdk-openjdk
 
   tasks:
+    - name: Display all variables/facts known for a host
+      debug:
+        msg: "archlinux init"
+
+    - name: create user
+      user:
+        name: wiloon
+        password: '$6$bNo6nGRA$DM/VghgjxTongwZm4BUL7jkw4lfF1nETHxk/YqVmbIGDO3HEzXXrTWeCw1WF7ZLkfgmt2w/Ta02xn2jbQdJNi/'
+        shell: /bin/bash
+
+    - name: chown /home/wiloon
+      file:
+        path: "/home/wiloon"
+        owner: wiloon
+        group: wiloon
+        mode: '0755'
+
+    - name: config /etc/sudoers
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ item }}"
+      with_items:
+        - "alias ll='ls -l --color=auto'"
+        
+    - name: Check Java
+      shell: command -v java
+      register: check_java
+      ignore_errors: True
+      changed_when: False
+      
+    - debug: msg="{{check_java.stdout}}"
+      when: check_java.rc == 0
+
+    - name: "download openjdk"
+      unarchive:
+        src: https://download.java.net/java/GA/jdk12/33/GPL/openjdk-12_linux-x64_bin.tar.gz
+        dest: /usr/local/bin
+        remote_src: yes
+      tags:
+        - jdk
+      when: check_java.stdout ==''
+
+    - name: "debian install emacs and update cache"
+      apt:
+        name: 'emacs'
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      tags:
+        - slow_task
+
     - name: "install apps for debian"
       apt:
         name: '{{ apps_common }} + {{ apps_debian }}'
@@ -32,6 +86,40 @@
         path: /etc/profile
         line: "{{ item }}"
       with_items:
-        - "alias ll = 'ls -l --color=auto'"
-        - "alias la = 'ls -la --color=auto'"      
+        - "alias ll='ls -l --color=auto'"
+        - "alias la='ls -la --color=auto'"
+        - "export JAVA_HOME=/usr/local/bin/jdk-12"
+        - "export PATH=$JAVA_HOME/bin:$PATH"
 
+    - name: mk /home/wiloon/.ssh
+      file:
+        path: /home/wiloon/.ssh
+        state: directory
+
+    - name: config .ssh/config
+      blockinfile:
+        path: /home/wiloon/.ssh/config
+        create: yes
+        owner: wiloon
+        group: wiloon
+        block: |
+          host aliyun
+            hostname wiloon.com
+            user wiloon
+            port 1022
+
+          host nuc
+            hostname nuc
+            user root
+            port 22
+
+          host cstick
+            hostname 192.168.50.215
+            user wiloon
+            port 22
+    - name: mk /home/wiloon/.ssh/id_rsa
+      file:
+        path: /home/wiloon/.ssh/id_rsa
+        state: touch
+        owner: wiloon
+        group: wiloon

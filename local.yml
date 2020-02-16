@@ -40,7 +40,7 @@
         path: /etc/sudoers
         line: "{{ item }}"
       with_items:
-        - "alias ll='ls -l --color=auto'"
+        - "wiloon ALL=(ALL) NOPASSWD: ALL"
         
     - name: Check Java
       shell: command -v java

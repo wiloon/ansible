@@ -8,7 +8,6 @@
       - gvim
       - aria2
       - maven
-      - gradle
       
     apps_debian:
       - emacs
@@ -16,6 +15,9 @@
       
     apps_archlinux:
       - jdk-openjdk
+      - svn
+      - git
+      - gradle
 
   tasks:
     - name: Display all variables/facts known for a host

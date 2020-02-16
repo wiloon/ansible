@@ -123,3 +123,9 @@
         state: touch
         owner: wiloon
         group: wiloon
+
+    - name: enable sshd
+      systemd:
+        name: sshd
+        state: started
+        enabled: yes

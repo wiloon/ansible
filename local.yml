@@ -5,19 +5,20 @@
     apps_common:
       - htop
       - emacs
-      - gvim
       - aria2
       - maven
       
     apps_debian:
       - emacs
       - ldnsutils
+      - vimi
       
     apps_archlinux:
       - jdk-openjdk
       - svn
       - git
       - gradle
+      - gvim
 
   tasks:
     - name: Display all variables/facts known for a host

@@ -12,6 +12,8 @@
       - emacs
       - ldnsutils
       - vimi
+      - openjdk-11-jdk
+      - openjdk-8-jdk
       
     apps_archlinux:
       - jdk-openjdk
@@ -44,24 +46,6 @@
         line: "{{ item }}"
       with_items:
         - "wiloon ALL=(ALL) NOPASSWD: ALL"
-        
-    - name: Check Java
-      shell: command -v java
-      register: check_java
-      ignore_errors: True
-      changed_when: False
-      
-    - debug: msg="{{check_java.stdout}}"
-      when: check_java.rc == 0
-
-    - name: "download openjdk"
-      unarchive:
-        src: https://download.java.net/java/GA/jdk12/33/GPL/openjdk-12_linux-x64_bin.tar.gz
-        dest: /usr/local/bin
-        remote_src: yes
-      tags:
-        - jdk
-      when: check_java.stdout ==''
 
     - name: "debian install emacs and update cache"
       apt:

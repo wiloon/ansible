@@ -7,18 +7,21 @@
       - emacs
       - aria2
       - maven
+      - subversion
+      - git
       
     apps_debian:
       - emacs
       - ldnsutils
-      - vimi
-      - openjdk-11-jdk
-      - openjdk-8-jdk
+      - vim
+      - default-jdk
+      - git-svn
+      - gnome-keyring
+      - jq
       
     apps_archlinux:
       - jdk-openjdk
       - svn
-      - git
       - gradle
       - gvim
 
@@ -68,27 +71,34 @@
         state: latest
       when: ansible_distribution == 'Archlinux'
 
-    - name: config /etc/profile
+
+    - name: mk /home/{{user_name}}/.ssh
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{user_name}}"
+        group: "{{user_name}}"
+      with_items:
+        - "/home/{{user_name}}/.ssh"
+        - "/home/{{user_name}}/bin"
+        - "/home/{{user_name}}/apps"
+
+    - name: config shell
       lineinfile:
-        path: /etc/profile
+        path: /home/{{user_name}}/.bashrc
         line: "{{ item }}"
       with_items:
         - "alias ll='ls -l --color=auto'"
         - "alias la='ls -la --color=auto'"
-        - "export JAVA_HOME=/usr/local/bin/jdk-12"
-        - "export PATH=$JAVA_HOME/bin:$PATH"
-
-    - name: mk /home/wiloon/.ssh
-      file:
-        path: /home/wiloon/.ssh
-        state: directory
+        - "JAVA_HOME=/home/{{user_name}}/apps/jdk/default"
+        - "PATH=/home/{{user_name}}/bin:$JAVA_HOME/bin:$PATH"
 
     - name: config .ssh/config
       blockinfile:
-        path: /home/wiloon/.ssh/config
+        path: /home/{{user_name}}/.ssh/config
         create: yes
-        owner: wiloon
-        group: wiloon
+        owner: "{{user_name}}"
+        group: "{{user_name}}"
         block: |
           host aliyun
             hostname wiloon.com
@@ -102,14 +112,14 @@
 
           host cstick
             hostname 192.168.50.215
-            user wiloon
+            user root
             port 22
-    - name: mk /home/wiloon/.ssh/id_rsa
+    - name: mk /home/{{user_name}}/.ssh/id_rsa
       file:
-        path: /home/wiloon/.ssh/id_rsa
+        path: /home/{{user_name}}/.ssh/id_rsa
         state: touch
-        owner: wiloon
-        group: wiloon
+        owner: "{{user_name}}"
+        group: "{{user_name}}"
 
     - name: enable sshd
       systemd:

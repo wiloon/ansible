@@ -82,6 +82,7 @@
         - "/home/{{user_name}}/.ssh"
         - "/home/{{user_name}}/bin"
         - "/home/{{user_name}}/apps"
+        - "/home/{{user_name}}/apps/gopath"
 
     - name: config shell
       lineinfile:
@@ -90,8 +91,11 @@
       with_items:
         - "alias ll='ls -l --color=auto'"
         - "alias la='ls -la --color=auto'"
-        - "JAVA_HOME=/home/{{user_name}}/apps/jdk/default"
-        - "PATH=/home/{{user_name}}/bin:$JAVA_HOME/bin:$PATH"
+        - "export JAVA_HOME=/home/{{user_name}}/apps/jdk/default"
+        - "export GOROOT=/home/{{user_name}}/apps/go"
+        - "export GOPATH=/home/{{user_name}}/apps/gopath"
+        - "export GOPROXY=https://goproxy.cn"
+        - "export PATH=$GOROOT/bin:$GOPATH/bin:/home/{{user_name}}/bin:$JAVA_HOME/bin:$PATH"
 
     - name: config .ssh/config
       blockinfile:
@@ -104,12 +108,18 @@
             hostname wiloon.com
             user wiloon
             port 1022
-
+          host router
+            hostname router
+            user root
+            port 99
           host nuc
             hostname nuc
             user root
             port 22
-
+          host dell
+            hostname dell
+            user root
+            port 22
           host cstick
             hostname 192.168.50.215
             user root

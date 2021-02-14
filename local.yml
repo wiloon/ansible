@@ -91,7 +91,7 @@
       with_items:
         - "alias ll='ls -l --color=auto'"
         - "alias la='ls -la --color=auto'"
-        - "export JAVA_HOME=/home/{{user_name}}/apps/jdk/default"
+        - "export JAVA_HOME=/usr/lib/jvm/default-runtime"
         - "export GOROOT=/home/{{user_name}}/apps/go"
         - "export GOPATH=/home/{{user_name}}/apps/gopath"
         - "export GOPROXY=https://goproxy.cn"
@@ -136,3 +136,6 @@
         name: sshd
         state: started
         enabled: yes
+
+    - name: print jdk version
+      ansible.builtin.shell: java -version

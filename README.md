@@ -1,4 +1,12 @@
 
+### 安装依赖
+   pacman -Syu && pacman -S git ansible
+
+### 执行脚本
+    sudo ansible-pull -U https://github.com/wiloon/ansible.git --skip-tags=jdk
+    sudo ansible-pull -U https://github.com/wiloon/ansible.git -e user_name=wiloon
+
+
 Add the following line to /etc/apt/sources.list:
 ```
 deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main

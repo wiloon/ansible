@@ -37,5 +37,5 @@ sudo apt-get install ansible
 sudo ansible-pull -U https://github.com/wiloon/ansible.git --skip-tags=jdk
 
 # local run
-ansible-playbook  local.yml
+ansible-playbook  local.yml -e user_name=wiloon
 ```

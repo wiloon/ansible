@@ -5,11 +5,8 @@
     apps_common:
       - htop
       - emacs
-      - aria2
-      - maven
-      - subversion
       - git
-      
+
     apps_debian:
       - emacs
       - ldnsutils
@@ -20,13 +17,18 @@
       - jq
       
     apps_archlinux:
+      - gvim
+      - wqy-microhei
+      - sudo
+
+    apps_archlinux_dev:
       - jdk-openjdk
       - svn
       - gradle
-      - gvim
       - code
-      - wqy-microhei
       - perl-term-readkey
+      - maven
+      - aria2
 
   tasks:
     - name: Display all variables/facts known for a host
@@ -74,6 +76,13 @@
         state: latest
       when: ansible_distribution == 'Archlinux'
 
+    - name: "install apps for archlinux"
+      pacman:
+        name: '{{ apps_archlinux_dev }}'
+        state: latest
+      when: ansible_distribution == 'Archlinux'
+      tags:
+        - dev
 
     - name: mk /home/{{user_name}}/.ssh
       file:
@@ -116,18 +125,11 @@
             hostname router
             user root
             port 99
-          host nuc
-            hostname nuc
-            user root
-            port 22
           host dell
             hostname dell
             user root
             port 22
-          host cstick
-            hostname 192.168.50.215
-            user root
-            port 22
+
     - name: mk /home/{{user_name}}/.ssh/id_rsa
       file:
         path: /home/{{user_name}}/.ssh/id_rsa
@@ -143,3 +145,5 @@
 
     - name: print jdk version
       ansible.builtin.shell: java -version
+      tags:
+        - dev

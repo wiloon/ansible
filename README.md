@@ -38,4 +38,5 @@ sudo ansible-pull -U https://github.com/wiloon/ansible.git --skip-tags=jdk
 
 # local run
 ansible-playbook  local.yml -e user_name=wiloon
+ansible-playbook  local.yml -e user_name=wiloon --skip-tags dev
 ```
